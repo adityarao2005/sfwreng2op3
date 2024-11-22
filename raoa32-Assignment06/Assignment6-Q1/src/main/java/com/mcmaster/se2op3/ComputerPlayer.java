@@ -23,5 +23,6 @@ public class ComputerPlayer extends Player {
 
         // Claim the square
         board.claimSquare(row, col, getSymbol());
+        System.out.printf("Player %c is done thinking.\n", getSymbol());
     }
 }
