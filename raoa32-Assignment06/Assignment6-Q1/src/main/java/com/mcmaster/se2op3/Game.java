@@ -47,7 +47,7 @@ public class Game {
         board.displayBoard();
         // Game loop
         // Loop as long as we haven't detected a win condition
-        while (!checkWinCondition()) {
+        while (turns != 0 && !checkWinCondition()) {
             // Player 1's turn
             player1.makeTurn(board);
             // Display the board
@@ -60,6 +60,9 @@ public class Game {
                 System.out.println("Player 1 wins!");
                 break;
             }
+
+            if (turns == 0)
+                break;
 
             // Player 2's turn
             player2.makeTurn(board);

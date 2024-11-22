@@ -1,5 +1,9 @@
 package com.mcmaster.se2op3;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Manages the Tic-Tac-Toe grid, including placing markers and displaying
  * the board.
@@ -38,6 +42,17 @@ public class Board {
         }
 
         return board[row - 1][column - 1] == ' ';
+    }
+
+    public List<Map.Entry<Integer, Integer>> getValidMoves() {
+        List<Map.Entry<Integer, Integer>> list = new ArrayList<>();
+
+        for (int row = 0; row < getRows(); row++)
+            for (int col = 0; col < getColumns(); col++)
+                if (board[row][col] == ' ')
+                    list.add(Map.entry(row + 1, col + 1));
+
+        return list;
     }
 
     public void claimSquare(int row, int column, char symbol) {

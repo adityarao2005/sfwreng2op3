@@ -1,5 +1,7 @@
 package com.mcmaster.se2op3;
 
+import java.util.Collections;
+
 // Represents a computer player in the Tic-Tac-Toe game
 public class ComputerPlayer extends Player {
 
@@ -11,18 +13,20 @@ public class ComputerPlayer extends Player {
     public void makeTurn(Board board) {
         // Prompt for row and column
         System.out.printf("Player %c is thinking.\n", getSymbol());
-        int row = (int) Math.round(Math.random() * 2 + 1);
-        int col = (int) Math.round(Math.random() * 2 + 1);
-
-        // Check if the move is valid
-        while (!board.isValidMove(row, col)) {
-            System.out.println("Invalid move. Enter row and column (1-3): ");
-            row = (int) (Math.random() * 2 + 1);
-            col = (int) (Math.random() * 2 + 1);
-        }
+        // Gets the valid moves and gets a random one from there
+        var availableSpots = board.getValidMoves();
+        Collections.shuffle(availableSpots);
+        var spot = availableSpots.get(0);
 
         // Claim the square
-        board.claimSquare(row, col, getSymbol());
+        board.claimSquare(spot.getKey(), spot.getValue(), getSymbol());
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // Should not happen
+            e.printStackTrace();
+            System.exit(1);
+        }
         System.out.printf("Player %c is done thinking.\n", getSymbol());
     }
 }
