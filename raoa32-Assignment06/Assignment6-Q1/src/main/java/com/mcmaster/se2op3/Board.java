@@ -9,14 +9,27 @@ import java.util.Map;
  * the board.
  */
 public class Board {
+    // The board is represented as a 2D array of characters
     private char[][] board;
+    // The number of rows and columns in the board
+    private int rows;
+    private int columns;
 
-    public Board() {
-        board = new char[3][3];
+    /**
+     * Initializes the board with the specified number of rows and columns.
+     * 
+     * @param rows    the number of rows in the board
+     * @param columns the number of columns in the board
+     */
+    public Board(int rows, int columns) {
+        // Create a new 2D array to represent the board
+        board = new char[rows][columns];
+        this.rows = rows;
+        this.columns = columns;
 
         // Initialize the board with empty spaces
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 board[i][j] = ' ';
             }
         }
@@ -27,26 +40,40 @@ public class Board {
      */
     public void displayBoard() {
         System.out.println("Board: ");
-        System.out.println("Rows | 1 | 2 | 3");
-        System.out.println("-----+---+---+---");
-        System.out.printf("1    | %c | %c | %c\n", board[0][0], board[0][1], board[0][2]);
-        System.out.println("     +---+---+---");
-        System.out.printf("2    | %c | %c | %c\n", board[1][0], board[1][1], board[1][2]);
-        System.out.println("     +---+---+---");
-        System.out.printf("3    | %c | %c | %c\n", board[2][0], board[2][1], board[2][2]);
+        System.out.println("Rows | 1 | 2 | 3 |");
+        System.out.println("-----+---+---+---+");
+        System.out.printf("1    | %c | %c | %c |\n", board[0][0], board[0][1], board[0][2]);
+        System.out.println("     +---+---+---+");
+        System.out.printf("2    | %c | %c | %c |\n", board[1][0], board[1][1], board[1][2]);
+        System.out.println("     +---+---+---+");
+        System.out.printf("3    | %c | %c | %c |\n", board[2][0], board[2][1], board[2][2]);
     }
 
+    /**
+     * Checks if the board is full (i.e., no empty spaces).
+     * 
+     * @return true if the board is full, false otherwise
+     */
     public boolean isValidMove(int row, int column) {
-        if (row < 1 || row > 3 || column < 1 || column > 3) {
+        // Check if the specified row and column are within the bounds of the board
+        if (row < 1 || row > rows || column < 1 || column > columns) {
             return false;
         }
 
+        // Check if the specified square is empty
         return board[row - 1][column - 1] == ' ';
     }
 
+    /**
+     * Gets all the valid moves on the board.
+     * 
+     * @return a list of valid moves as (row, column) pairs
+     */
     public List<Map.Entry<Integer, Integer>> getValidMoves() {
+        // Create a list to store the valid moves
         List<Map.Entry<Integer, Integer>> list = new ArrayList<>();
 
+        // Iterate through the board and add the empty squares to the list
         for (int row = 0; row < getRows(); row++)
             for (int col = 0; col < getColumns(); col++)
                 if (board[row][col] == ' ')
@@ -55,6 +82,13 @@ public class Board {
         return list;
     }
 
+    /**
+     * Places a marker on the board at the specified row and column.
+     * 
+     * @param row    the row to place the marker
+     * @param column the column to place the marker
+     * @param symbol the symbol to place on the board
+     */
     public void claimSquare(int row, int column, char symbol) {
         board[row - 1][column - 1] = symbol;
     }
@@ -68,11 +102,21 @@ public class Board {
         return board;
     }
 
+    /**
+     * Allows for people to retrieve the number of rows
+     * 
+     * @return number of rows
+     */
     public int getRows() {
-        return board.length;
+        return rows;
     }
 
+    /**
+     * Allows for people to retrieve the number of columns
+     * 
+     * @return number of columns
+     */
     public int getColumns() {
-        return board[0].length;
+        return columns;
     }
 }

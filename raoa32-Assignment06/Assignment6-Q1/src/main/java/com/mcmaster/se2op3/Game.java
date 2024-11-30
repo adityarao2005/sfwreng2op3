@@ -7,39 +7,68 @@ import java.util.Scanner;
  * conditions).
  */
 public class Game {
+    // Scanner for reading input
     public static Scanner scanner = new Scanner(System.in);
+    // The players in the game
     private Player player1;
     private Player player2;
     private Board board;
 
     public Game() {
-        // Welcome message
-        System.out.println("Welcome to Tic-Tac-Toe!");
-
-        // Create the players
-        player1 = createPlayer('X');
-        player2 = createPlayer('O');
-        board = new Board();
     }
 
-    // Create a player based on user input
-    private Player createPlayer(char symbol) {
-        // Ask the user if they want to be a human or computer player
-        System.out.printf("Player %c, Enter whether you want to be a human (H) or computer (C): \n", symbol);
-        // Read the user's input
-        String playerType = scanner.nextLine();
-        // Validate the input
-        while (!playerType.equalsIgnoreCase("H") && !playerType.equalsIgnoreCase("C")) {
-            System.out.println("Invalid input. Please enter H for human or C for computer: ");
-            playerType = scanner.nextLine();
+    private void initializeGame() {
+
+        // Game modes prompt
+        System.out.println("Game Modes: Human vs Human (1), Human vs Computer (2), Computer vs Computer (3)");
+        System.out.println("Enter Game Mode (1,2,3):");
+        int gameMode = scanner.nextInt();
+
+        System.out.println(gameMode);
+
+        // Validate input
+        while (gameMode < 1 || gameMode > 3) {
+            System.out.println("Invalid input. Please enter 1, 2, or 3: ");
+            System.out.println("Game Modes: Human vs Human (1), Human vs Computer (2), Computer vs Computer (3)");
+            System.out.println("Enter Game Mode (1,2,3):");
+            gameMode = scanner.nextInt();
+        }
+        // Create the players
+        if (gameMode == 1) {
+            player1 = new HumanPlayer('X');
+            player2 = new HumanPlayer('O');
+        } else if (gameMode == 2) {
+            player1 = new HumanPlayer('X');
+            player2 = new SmartComputerPlayer('O');
+        } else {
+            player1 = new SmartComputerPlayer('X');
+            player2 = new SmartComputerPlayer('O');
         }
 
-        // Create the player based on the input
-        if (playerType.equalsIgnoreCase("H")) {
-            return new HumanPlayer(symbol);
-        } else {
-            return new ComputerPlayer(symbol);
-        }
+        // Create the board
+        board = createBoard();
+
+    }
+
+    // Create a new board
+    public Board createBoard() {
+        return new Board(3, 3);
+    }
+
+    public void start() {
+
+        boolean playAgain = false;
+        do {
+            // Re-initializes the game
+            initializeGame();
+            // Create a new game
+            gameLoop();
+
+            // Ask the user if they want to play again
+            System.out.println("Would you like to play again? (Y/N)");
+            String response = scanner.next();
+            playAgain = response.equalsIgnoreCase("Y");
+        } while (playAgain);
     }
 
     public void gameLoop() {
@@ -58,7 +87,7 @@ public class Game {
             // Check for win condition
             if (checkWinCondition()) {
                 System.out.println("Player 1 wins!");
-                break;
+                return;
             }
 
             if (turns == 0)
@@ -73,7 +102,7 @@ public class Game {
             // Check for win condition
             if (checkWinCondition()) {
                 System.out.println("Player 2 wins!");
-                break;
+                return;
             }
         }
 
@@ -86,34 +115,72 @@ public class Game {
     public boolean checkWinCondition() {
         // Check rows
         for (int row = 0; row < board.getRows(); row++) {
-            if (board.getBoard()[row][0] == board.getBoard()[row][1]
-                    && board.getBoard()[row][1] == board.getBoard()[row][2]
-                    && board.getBoard()[row][0] != ' ') {
+            // Check flag
+            boolean check = true;
+
+            // Get the first character in the row
+            char cc = board.getBoard()[row][0];
+
+            // Check if all the characters in the row are the same and not spaces
+            for (int i = 1; i < board.getColumns(); i++) {
+                if (cc != board.getBoard()[row][i] || cc == ' ') {
+                    check = false;
+                    break;
+                }
+            }
+
+            // If all the characters in the row are the same, return true
+            if (check) {
                 return true;
             }
         }
 
         // Check columns
         for (int column = 0; column < board.getColumns(); column++) {
-            if (board.getBoard()[0][column] == board.getBoard()[1][column]
-                    && board.getBoard()[1][column] == board.getBoard()[2][column]
-                    && board.getBoard()[0][column] != ' ') {
+            // Check flag
+            boolean check = true;
+
+            // Get the first character in the column
+            char cc = board.getBoard()[0][column];
+
+            // Check if all the characters in the column are the same and not spaces
+            for (int i = 1; i < board.getColumns(); i++) {
+                if (cc != board.getBoard()[i][column] || cc == ' ') {
+                    check = false;
+                    break;
+                }
+            }
+
+            // If all the characters in the column are the same, return true
+            if (check) {
                 return true;
             }
         }
 
         // Check diagonals
-        if (board.getBoard()[0][0] == board.getBoard()[1][1] && board.getBoard()[1][1] == board.getBoard()[2][2]
-                && board.getBoard()[0][0] != ' ') {
-            return true;
+        boolean check = true;
+        char cc = board.getBoard()[0][0];
+        for (int i = 1; i < board.getRows(); i++) {
+            if (cc != board.getBoard()[i][i] || cc == ' ') {
+                check = false;
+                break;
+            }
         }
 
-        if (board.getBoard()[0][2] == board.getBoard()[1][1] && board.getBoard()[1][1] == board.getBoard()[2][0]
-                && board.getBoard()[0][2] != ' ') {
+        if (check) {
             return true;
         }
+        check = true;
 
-        return false;
+        cc = board.getBoard()[0][board.getRows() - 1];
+        for (int i = 1; i < board.getRows(); i++) {
+            if (cc != board.getBoard()[i][board.getRows() - 1 - i] || cc == ' ') {
+                check = false;
+                break;
+            }
+        }
+
+        return check;
     }
 
 }
