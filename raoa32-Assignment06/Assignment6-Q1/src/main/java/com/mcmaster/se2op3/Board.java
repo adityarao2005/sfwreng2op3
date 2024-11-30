@@ -40,13 +40,25 @@ public class Board {
      */
     public void displayBoard() {
         System.out.println("Board: ");
-        System.out.println("Rows | 1 | 2 | 3 |");
-        System.out.println("-----+---+---+---+");
-        System.out.printf("1    | %c | %c | %c |\n", board[0][0], board[0][1], board[0][2]);
-        System.out.println("     +---+---+---+");
-        System.out.printf("2    | %c | %c | %c |\n", board[1][0], board[1][1], board[1][2]);
-        System.out.println("     +---+---+---+");
-        System.out.printf("3    | %c | %c | %c |\n", board[2][0], board[2][1], board[2][2]);
+
+        StringBuilder row = new StringBuilder("Rows |");
+        StringBuilder rowDivider = new StringBuilder("-----+");
+        for (int i = 1; i <= columns; i++) {
+            row.append(String.format(" %d |", i));
+            rowDivider.append("---+");
+        }
+
+        System.out.println(row);
+        System.out.println(rowDivider);
+
+        for (int i = 0; i < rows; i++) {
+            StringBuilder rowContent = new StringBuilder(String.format("%d    |", i + 1));
+            for (int j = 0; j < columns; j++) {
+                rowContent.append(String.format(" %c |", board[i][j]));
+            }
+            System.out.println(rowContent);
+            System.out.println(rowDivider);
+        }
     }
 
     /**

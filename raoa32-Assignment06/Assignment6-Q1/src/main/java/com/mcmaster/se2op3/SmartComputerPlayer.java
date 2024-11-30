@@ -168,9 +168,12 @@ public class SmartComputerPlayer extends ComputerPlayer {
 
     private boolean tryCenter(Board board) {
         // If the center square is available, take it
-        if (board.isValidMove(board.getRows() / 2, board.getColumns() / 2)) {
+        int centerRow = (int) Math.round((float) board.getRows() / 2);
+        int centerColumn = (int) Math.round((float) board.getColumns() / 2);
+
+        if (board.isValidMove(centerRow, centerColumn)) {
             // Claim the square
-            board.claimSquare(board.getRows() / 2, board.getColumns() / 2, getSymbol());
+            board.claimSquare(centerRow, centerColumn, getSymbol());
             return true;
         }
         return false;
@@ -186,11 +189,11 @@ public class SmartComputerPlayer extends ComputerPlayer {
                     entry.getKey() == 1 || entry.getValue() == 1 ||
                     // Check if x or y is the max
                             entry.getKey() == board.getRows() || entry.getValue() == board.getColumns();
-                });
+                }).toList();
 
-        if (validMoves.count() > 0) {
+        if (validMoves.size() > 0) {
             // Get the first corner
-            var corner = validMoves.findFirst().get();
+            var corner = validMoves.get(0);
             // Claim the square
             board.claimSquare(corner.getKey(), corner.getValue(), getSymbol());
             return true;

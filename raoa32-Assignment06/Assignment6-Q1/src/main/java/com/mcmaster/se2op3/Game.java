@@ -24,8 +24,6 @@ public class Game {
         System.out.println("Enter Game Mode (1,2,3):");
         int gameMode = scanner.nextInt();
 
-        System.out.println(gameMode);
-
         // Validate input
         while (gameMode < 1 || gameMode > 3) {
             System.out.println("Invalid input. Please enter 1, 2, or 3: ");
